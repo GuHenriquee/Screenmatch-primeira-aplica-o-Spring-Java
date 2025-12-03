@@ -1,5 +1,6 @@
 package br.com.alura.screenmatch.main;
 
+import br.com.alura.screenmatch.models.DadosEpisodios;
 import br.com.alura.screenmatch.models.DadosSerie;
 import br.com.alura.screenmatch.models.Temporadas;
 import br.com.alura.screenmatch.service.ConsumoApi;
@@ -34,5 +35,6 @@ public class main {
         }
         listaTemporadas.forEach(System.out::println);
 
+        listaTemporadas.forEach(t -> t.episodios().forEach(e-> System.out.println(e.titulo())));
     }
 }
