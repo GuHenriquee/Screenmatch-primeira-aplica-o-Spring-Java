@@ -9,10 +9,7 @@ import br.com.alura.screenmatch.service.ConverterDados;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.List;
-import java.util.Scanner;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class main {
@@ -48,9 +45,18 @@ public class main {
                 .flatMap(t -> t.episodios().stream())
                 .collect(Collectors.toList());
 
-        System.out.println("Top 5 episodios");
-        dadosEpisodios.stream().filter(e -> !e.avaliacao().equalsIgnoreCase("N/A")).sorted(Comparator.comparing(DadosEpisodios::avaliacao).reversed()).limit(5)
-                .forEach(System.out::println);
+//        System.out.println("Top 10 episodios");
+//        dadosEpisodios.stream().
+//                filter(e -> !e.avaliacao().equalsIgnoreCase("N/A"))
+//                .peek(e -> System.out.println("Primeiro filtro (N/A)"))
+//                .sorted(Comparator.comparing(DadosEpisodios::avaliacao).reversed())
+//                .peek(e -> System.out.println("Ordenação: " + e))
+//                .limit(10)
+//                .peek(e -> System.out.println("Limite: " + e))
+//                .map(e -> e.titulo().toUpperCase())
+//                .peek(e -> System.out.println("Mapeamento: " + e))
+//                .forEach(System.out::println);
+
 
         List<Episodio> episodios = listaTemporadas.stream()
                 .flatMap(t -> t.episodios().stream()
@@ -72,6 +78,25 @@ public class main {
                         "Temporada: " + e.getTemporada() +
                                 "Episodio: " + e.getTitulo() +
                                 "Data lancamento: " + e.getDataLancamento().format(formatador)));
+
+
+        System.out.println("Digite um trecho do titulo do episodio: ");
+        var trechoTitulo = leitura.nextLine();
+
+        Optional<Episodio> episodioBuscado =  episodios.stream()
+                .filter(e -> e.getTitulo().toUpperCase().contains(trechoTitulo.toUpperCase()))
+                .findFirst();
+        if(episodioBuscado.isPresent()){
+            System.out.println("Episodio encontrado");
+            System.out.println("Temporada: " + episodioBuscado.get().getTemporada());
+        }else{
+            System.out.println("Episodio nao encontrado");
+        }
+
+
+
+
+
 
     }
 
