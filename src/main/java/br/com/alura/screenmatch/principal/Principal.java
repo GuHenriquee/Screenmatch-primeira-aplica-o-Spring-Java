@@ -61,19 +61,13 @@ public class Principal {
     private void buscarSerieWeb() {
         DadosSerie dados = getDadosSerie();
         System.out.println(dados);
-        //dadosSerie.add(dados);
         Serie serie = new Serie(dados);
         repositorio.save(serie);
 
     }
 
     private void listarSeriesBuscadas(){
-        List<Serie> series = new ArrayList<>();
-
-        series = dadosSerie.stream().
-                map(d -> new Serie(d))
-                .collect(Collectors.toList());
-
+        List<Serie> series = repositorio.findAll();
         series.stream()
                 .sorted(Comparator.comparing(Serie::getGenero))
                 .forEach(System.out::println);
