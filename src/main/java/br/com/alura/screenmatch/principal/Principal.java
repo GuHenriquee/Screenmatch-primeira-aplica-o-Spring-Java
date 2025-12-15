@@ -35,6 +35,8 @@ public class Principal {
                     1 - Buscar séries
                     2 - Buscar episódios
                     3 - Listar séries buscadas
+                    4 - Buscar série por titulo
+                    5 - Buscar série por ator
                     0 - Sair                                 
                     """;
 
@@ -51,6 +53,11 @@ public class Principal {
                 case 3:
                     listarSeriesBuscadas();
                     break;
+                case 4:
+                    buscarSeriePorTitulo();
+                    break;
+                case 5:
+                    buscarSeriePorAtor();
                 case 0:
                     System.out.println("Saindo...");
                     break;
@@ -59,6 +66,17 @@ public class Principal {
             }
         }
     }
+
+    private void buscarSeriePorAtor() {
+        System.out.println("Qual nome para a busca: ");
+        var nomeAtor = leitura.nextLine();
+        System.out.println("Avaliacao a partir de qual valor: ");
+        var avaliacao = leitura.nextDouble();
+        List<Serie> seriesEncontradas = repositorio.findByatoresContainingIgnoreCaseAndAvaliacaoGreaterThanEqual(nomeAtor, avaliacao);
+        System.out.println("Series em que "+ nomeAtor + "trabalhou: " );
+        seriesEncontradas.forEach(s -> System.out.println(s.getTitulo() + " avaliacao " + s.getAvaliacao() ) );
+    }
+
 
     private void buscarSerieWeb() {
         DadosSerie dados = getDadosSerie();
@@ -88,17 +106,15 @@ public class Principal {
 
     private void buscarEpisodioPorSerie(){
         listarSeriesBuscadas();
-
         System.out.println("Escolha uma serie pelo nome: ");
         var nomeSerie = leitura.nextLine();
 
-        Optional<Serie> serie =  series.stream()
-                .filter(s -> s.getTitulo().toLowerCase().contains(nomeSerie.toLowerCase()))
-                .findFirst();
+        Optional<Serie> serie =  repositorio.findByTituloContainingIgnoreCase(nomeSerie);
 
         if(serie.isPresent()){
 
             var serieEncontrada = serie.get();
+            // .get por serie ser um Optional, e esse .get transforma ele no tipo Serie definitivamente
 
             List<Temporadas> temporadas = new ArrayList<>();
 
@@ -121,8 +137,19 @@ public class Principal {
         }else{
             System.out.println("Serie não encontrada! ");
         }
+    }
+    private void buscarSeriePorTitulo() {
+        System.out.println("Escolha uma serie pelo nome: ");
+        var nomeSerie = leitura.nextLine();
+        Optional<Serie> serieBuscada = repositorio.findByTituloContainingIgnoreCase(nomeSerie);
 
+        if(serieBuscada.isPresent()){
+            System.out.println("Dados da serie: " + serieBuscada.get());
+        }else{
+            System.out.println("Serie nao encontrada!");
         }
+
+    }
 
 
 }
